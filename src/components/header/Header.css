@@ -1,0 +1,41 @@
+.header{
+    width: 100%;
+    height: 60px;
+    text-align: center;
+    background-color: #025FEB;
+    color: white;
+
+    display: flex;
+    flex-direction: row;
+}
+.header img{
+    margin-left: 40px;
+    margin-right: 5px;
+}
+.logo{
+    width: 110px;
+    height: auto;
+}
+nav{
+    display: flex;
+    flex-direction: row;
+    margin-left: auto;
+    margin-right: 40px;
+    margin-top: 10px;
+}
+nav img{
+    position: relative;
+    top: 7px;
+}
+nav a{
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+.scheduleImg{
+    height: 25px;
+    width: auto;
+   
+}
+
