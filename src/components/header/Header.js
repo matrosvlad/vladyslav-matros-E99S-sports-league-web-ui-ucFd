@@ -1,16 +1,16 @@
 import React from "react";
 import "./Header.css";
-
+import { Link } from "react-router-dom";
 
 export default function Header() {
     return (
       <div className="header">
         <img className="logo" src="./Images/logo.svg" alt="logo" />
-        <nav className="hnav">
-          <a className="menu_schedule" href="http://localhost:3000/schedule">
-            <img className="scheduleImg" src="./Images/schedule.png" alt="schedule"/>Schedule</a>
-          <a className="menu_leaderboard" href="http://localhost:3000/leaderboard">
-            <img className="scheduleImg" src="./Images/leaderboard.png" alt="leaderboard"/>Leaderboard</a>
+        <nav>
+          <Link className="menu_schedule" to="/">
+            <img className="scheduleImg" src="./Images/schedule.png" alt="schedule"/>Schedule</Link>
+          <Link className="menu_leaderboard" to="/leaderboard">
+            <img className="scheduleImg" src="./Images/leaderboard.png" alt="leaderboard"/>Leaderboard</Link>
         </nav>
       </div>
     );

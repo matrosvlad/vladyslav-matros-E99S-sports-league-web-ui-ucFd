@@ -1,44 +1,32 @@
 import React from "react";
-
+import { BrowserRouter as Router, Switch, Route }
+    from 'react-router-dom';
+import Schedule from './Schedule';
+import LeaderBoard from './LeaderBoard';
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
+// import { Switch } from "react-router-dom/cjs/react-router-dom.min";
 
 function App() {
 
-  const [state, setState] = React.useState([]);
-  const getData = () => {
-    fetch("http://localhost:3001/api/v1/getAllMatches", {
-      headers: {'Authorization': 'Bearer YuHBdSlDXY000xa8IlCm7Qgq4_s'}
-    })
-      .then((response) => response.json())
-      .then((data) => setState(data));
-  };
 
-  React.useEffect(() => getData(), []);
   
-  const items = state.matches.map((item, index) => {
-    return (
-      <div className="tablerow" key={index}>
-        <div className="date">{item.matchDate}</div>
-        <div className="stadium">{item.stadium}</div>
 
-        <div className="teams">
-          {<img src={`https://flagsapi.codeaid.io/${item.homeTeam}.png`} alt="countryflag"/>}
-          {item.homeTeam}
-          {item.homeTeamScore}
-          <p> : </p>
-          {item.awayTeamScore}
-          {<img src={`https://flagsapi.codeaid.io/${item.awayTeam}.png`} alt="countryflag"/>} 
-          {item.awayTeam}
-        </div>
-      </div>
-    );
-  });
   return (
     <div className="App">
-      <Header/>
-      <h1>League Schedule</h1>
-      <div className="main">{items}</div>
+       <Router>
+        <Header/>
+          {/* <Switch>
+            <Route exact path='/schedule' element={<App />} />
+            <Route exact path='/leaderboard' element={<LeaderBoard />} />
+          </Switch> */}
+          <Switch>
+              <Route exact path='/'><Schedule /></Route>
+              <Route path='/leaderboard'><LeaderBoard /></Route>
+          </Switch>
+
+        </Router>
+
       <Footer/>
     </div>
   );
