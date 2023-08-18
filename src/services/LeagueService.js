@@ -34,48 +34,17 @@ class LeagueService {
      * 
      * @param {Array} matches List of matches.
      */    
-    setMatches(matches) {}
-
-
-
+    setMatches(matches) {
+        this.matches = matches;
+    }
 
     /**
      * Returns the full list of matches.
      * 
      * @returns {Array} List of matches.
      */
-    getMatches(state) {
-        const items = state.matches.map((item, index) => {
-            const optionsDate = {year: 'numeric', month: 'numeric', day: 'numeric' };
-            const optionsTime = {hour: '2-digit', minute:'2-digit', timeZone: 'Europe/Berlin'};
-    
-            return (
-              <div className="tablerow" key={index}>
-                <div className="datetime">
-                  <div className="date">{new Date(item.matchDate).toLocaleDateString('de-DE', optionsDate)}</div>
-                  <div className="time">{new Date(item.matchDate).toLocaleTimeString('de-DE', optionsTime)}</div>
-                </div>
-                <div className="stadium">{item.stadium}</div>
-        
-                <div className="teams">
-                  <div className="hometeam">
-                    <p>{item.homeTeam}</p>
-                    {<img src={`https://flagsapi.codeaid.io/${item.homeTeam}.png`} alt="countryflag"/>}
-                  </div>
-                  <div className="result">
-                    <p>{item.homeTeamScore}</p>
-                    <p> : </p>
-                    <p>{item.awayTeamScore}</p>
-                  </div>
-                  <div className="awayteam">
-                    {<img src={`https://flagsapi.codeaid.io/${item.awayTeam}.png`} alt="countryflag"/>} 
-                    <p>{item.awayTeam}</p>
-                  </div>
-                </div>
-              </div>
-            );
-          });
-        return items;
+    getMatches() {
+        return this.matches;
     }
 
     /**
@@ -93,36 +62,79 @@ class LeagueService {
      * 
      * @returns {Array} List of teams representing the leaderboard.
      */
-    getLeaderboard(data) {
-        const teamsData = {};        
-        data.forEach(match => {
-        const { homeTeam, awayTeam, homeGoals, awayGoals } = match;
+    getLeaderboard() {
+        const teamsData = {};
 
-        if (!teamsData[homeTeam]) teamsData[homeTeam] = { points: 0, goalsFor: 0, goalsAgainst: 0 };
-        if (!teamsData[awayTeam]) teamsData[awayTeam] = { points: 0, goalsFor: 0, goalsAgainst: 0 };
-
-        if (homeGoals > awayGoals) {
-        teamsData[homeTeam].points += 3;
-        } else if (homeGoals < awayGoals) {
-        teamsData[awayTeam].points += 3;
-        } else {
-        teamsData[homeTeam].points += 1;
-        teamsData[awayTeam].points += 1;
+        for (const match of this.getMatches()) {
+        const { homeTeam, awayTeam, matchPlayed, homeTeamScore, awayTeamScore } = match;
+    
+        if (!teamsData[homeTeam]) {
+            teamsData[homeTeam] = {
+            teamName: homeTeam,
+            matchesPlayed: 0,
+            goalsFor: 0,
+            goalsAgainst: 0,
+            points: 0,
+            };
         }
+    
+        if (!teamsData[awayTeam]) {
+            teamsData[awayTeam] = {
+            teamName: awayTeam,
+            matchesPlayed: 0,
+            goalsFor: 0,
+            goalsAgainst: 0,
+            points: 0,
+            };
+        }
+    
+        if (matchPlayed) {
+            teamsData[homeTeam].matchesPlayed++;
+            teamsData[homeTeam].goalsFor += homeTeamScore;
+            teamsData[homeTeam].goalsAgainst += awayTeamScore;
+    
+            teamsData[awayTeam].matchesPlayed++;
+            teamsData[awayTeam].goalsFor += awayTeamScore;
+            teamsData[awayTeam].goalsAgainst += homeTeamScore;
+    
+            if (homeTeamScore > awayTeamScore) {
+                teamsData[homeTeam].points += 3;
+            } else if (homeTeamScore === awayTeamScore) {
+                teamsData[homeTeam].points += 1;
+                teamsData[awayTeam].points += 1;
+            } else {
+                teamsData[awayTeam].points += 3;
+            }
+        }
+        }
+        const sortedTeamData = Object.values(teamsData).sort((a, b) => {
+            if (a.points !== b.points) {
+            return b.points - a.points; // Sort by points descending
+            }
+            
+            if ((a.goalsFor - a.goalsAgainst) !== (b.goalsFor - b.goalsAgainst)) {
+                return (b.goalsFor - b.goalsAgainst) - (a.goalsFor - a.goalsAgainst); // Sort by goals difference descending
+            }
 
-        teamsData[homeTeam].goalsFor += homeGoals;
-        teamsData[homeTeam].goalsAgainst += awayGoals;
-        teamsData[awayTeam].goalsFor += awayGoals;
-        teamsData[awayTeam].goalsAgainst += homeGoals;
+            if (a.goalsFor !== b.goalsFor) {
+            return b.goalsFor - a.goalsFor; // Sort by goals scored descending
+            }
+        
+            return a.teamName.localeCompare(b.teamName); // Sort alphabetically
         });
-        return teamsData;
+    
+        return Object.values(sortedTeamData);
     }
     
     /**
      * Asynchronic function to fetch the data from the server.
      */
     async fetchData() {
-        
+        const response = await fetch("http://localhost:3001/api/v1/getAllMatches", {
+        headers: {'Authorization': 'Bearer YuHBdSlDXY000xa8IlCm7Qgq4_s'}
+      });
+        const data = await response.json();
+        this.setMatches(data.matches);
     }    
 }
 

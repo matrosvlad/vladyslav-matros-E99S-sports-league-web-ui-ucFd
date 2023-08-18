@@ -1,0 +1,109 @@
+.header_teamname{
+    margin-left: 10px;
+}
+.header_standings{
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+}
+.header_points{
+    margin-right: 45px;
+}
+.tablerow_leaderboard{
+    display: flex;
+    flex-direction: row;
+    height: 70px;
+    border-top: 2px;
+    border-top-style: solid;
+    border-top-color: #E4EDF2;
+  }
+.teamLeaderboard{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 15px;
+    gap: 20px;
+    font-size: 16px;
+}
+.points{
+    display: flex;
+    align-items: center;
+    margin-right: 55px;
+    color: #025FEB;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+
+@media only screen and (min-width: 800px) {
+    .goal_difference {
+        display: none;
+    }
+    .goals{
+        display: block;
+    }
+    .header_scores{
+        display: flex;
+        flex-direction: row;
+        gap: 75px;
+        align-items: center;
+        margin-left: auto;
+        margin-right: 90px;
+    }
+    .scores{
+        display: flex;
+        flex-direction: row;
+        gap: 85px;
+        align-items: center;
+        margin-left: auto;
+        margin-right: 112px;
+    }
+}
+@media only screen and (min-width:550px) and (max-width:800px) {
+    .goal_difference {
+      display: none;
+    }
+    .goals{
+        display: block;
+    }
+    .header_scores{
+        display: flex;
+        flex-direction: row;
+        gap: 50px;
+        align-items: center;
+        margin-left: auto;
+        margin-right: 50px;
+    }
+    .scores{
+        display: flex;
+        flex-direction: row;
+        gap: 61px;
+        align-items: center;
+        margin-left: auto;
+        margin-right: 70px;
+    }
+}
+@media only screen and (max-width: 550px) {
+    .goal_difference {
+      display: block;
+    }
+    .goals{
+        display: none;
+    }
+    .header_scores{
+        display: flex;
+        flex-direction: row;
+        gap: 37px;
+        align-items: center;
+        margin-left: auto;
+        margin-right: 43px;
+    }
+    .scores{
+        display: flex;
+        flex-direction: row;
+        gap: 50px;
+        align-items: center;
+        margin-left: auto;
+        margin-right: 65px;
+    }
+}

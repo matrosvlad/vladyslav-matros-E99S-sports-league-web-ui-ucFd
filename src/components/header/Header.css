@@ -4,7 +4,6 @@
     text-align: center;
     background-color: #025FEB;
     color: white;
-
     display: flex;
     flex-direction: row;
 }
@@ -36,6 +35,5 @@ nav a{
 .scheduleImg{
     height: 25px;
     width: auto;
-   
 }
 

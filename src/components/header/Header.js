@@ -7,7 +7,7 @@ export default function Header() {
       <div className="header">
         <img className="logo" src="./Images/logo.svg" alt="logo" />
         <nav>
-          <Link className="menu_schedule" to="/">
+          <Link className="menu_schedule" to="/schedule">
             <img className="scheduleImg" src="./Images/schedule.png" alt="schedule"/>Schedule</Link>
           <Link className="menu_leaderboard" to="/leaderboard">
             <img className="scheduleImg" src="./Images/leaderboard.png" alt="leaderboard"/>Leaderboard</Link>

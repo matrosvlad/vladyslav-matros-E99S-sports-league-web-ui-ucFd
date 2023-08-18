@@ -1,24 +1,38 @@
-import React from 'react';
-import LeagueService from './services/LeagueService';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const Schedule = () => {
+    const [state, setMatches] = useState([]);
 
-    const [state, setState] = React.useState([]);
-    const getData = () => {
-      fetch("http://localhost:3001/api/v1/getAllMatches", {
-        headers: {'Authorization': 'Bearer YuHBdSlDXY000xa8IlCm7Qgq4_s'}
-      })
-        .then((response) => response.json())
-        .then((data) => setState(data));
-    };
-    
-    React.useEffect(() => getData(), []);
+    useEffect(() => {
+      async function fetchData() {
+        try {
+          // Get access token
+          const accessTokenResponse = await axios.get('http://localhost:3001/api/v1/getAccessToken');
+          const accessToken = accessTokenResponse.data.access_token;
+          
+          // Fetch matches with authorization
+          const matchesResponse = await axios.get('http://localhost:3001/api/v1/getAllMatches', {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          });
+          
+          setMatches(matchesResponse.data.matches);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      }
+  
+      fetchData();
+    }, []);
 
-    const items = state.matches.map((item, index) => {
+
+    const getMatches = state && state.map((item, index) => {
         const optionsDate = {year: 'numeric', month: 'numeric', day: 'numeric' };
         const optionsTime = {hour: '2-digit', minute:'2-digit', timeZone: 'Europe/Berlin'};
         return (
-          <div className="tablerow" key={index}>
+          <div className="tablerow_schedule" key={index}>
             <div className="datetime">
               <div className="date">{new Date(item.matchDate).toLocaleDateString('de-DE', optionsDate)}</div>
               <div className="time">{new Date(item.matchDate).toLocaleTimeString('de-DE', optionsTime)}</div>
@@ -31,9 +45,9 @@ const Schedule = () => {
                 {<img src={`https://flagsapi.codeaid.io/${item.homeTeam}.png`} alt="countryflag"/>}
               </div>
               <div className="result">
-                <p>{item.homeTeamScore}</p>
+                <p>{item.matchPlayed ? item.homeTeamScore : '-'}</p>
                 <p> : </p>
-                <p>{item.awayTeamScore}</p>
+                <p>{item.matchPlayed ? item.awayTeamScore : '-'}</p>
               </div>
               <div className="awayteam">
                 {<img src={`https://flagsapi.codeaid.io/${item.awayTeam}.png`} alt="countryflag"/>} 
@@ -56,7 +70,7 @@ const Schedule = () => {
                     <p className="awayteam">Away Team</p>
                 </div>
             </div>
-        <div className="main">{items}</div>
+        <div className="main">{getMatches}</div>
         </div>
     );
 };
